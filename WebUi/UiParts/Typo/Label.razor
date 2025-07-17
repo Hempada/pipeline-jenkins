@@ -1,0 +1,23 @@
+﻿@inherits ComponentBase
+<MudText Typo="Typo.body1" Class="@Class" 
+         Style="@($"--mud-typography-body1-size: 0.9em; {Style}")"
+         Color="Color">
+    @ChildContent
+</MudText>
+
+@code{
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Class { get; set; } = string.Empty;
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Style { get; set; } = string.Empty;
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public Color Color { get; set; } = Color.Default;
+}

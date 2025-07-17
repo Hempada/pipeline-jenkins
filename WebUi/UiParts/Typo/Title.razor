@@ -1,0 +1,15 @@
+﻿@inherits ComponentBase
+<MudText Typo="Typo.h6" Class="@Class">
+    @ChildContent
+</MudText>
+
+@code{
+    private const string INITIAL_CLASS = "mb-8";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Class { get; set; } = INITIAL_CLASS;
+}

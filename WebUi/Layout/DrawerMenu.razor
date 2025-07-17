@@ -1,0 +1,60 @@
+﻿@using WebUi.Services
+@inject ISessionManager SessionManager
+
+<style>
+    .drawer-menu {
+        border-right: solid 1px var(--mud-palette-gray-light);
+    }
+
+    .drawer-menu-header {
+        border-bottom: solid 1px var(--mud-palette-gray-light);
+        min-height: 64px;
+        height: 64px;
+    }
+
+    .drawer-menu-header-container {
+        align-items: center;
+        margin-left: -36px;
+    }
+
+    .drawer-menu-appname {
+        font-size: 1.2rem;
+        margin-top: 2px;
+        margin-bottom: -2px;
+    }
+
+    .drawer-menu-appversion {
+        font-size: 0.8rem;
+        margin-top: -2px;
+        margin-bottom: 2px;
+    }
+</style>
+
+<MudDrawer @bind-Open="@Open" ClipMode="DrawerClipMode.Docked" Elevation="0" Variant="@DrawerVariant.Persistent"
+           Class="drawer-menu">
+    <MudDrawerHeader Class="d-flex justify-center drawer-menu-header">
+        <MudStack Row Class="d-flex justify-center drawer-menu-header-container" Spacing="2">
+            <MudItem Class="d-flex justify-center">
+                <AppIcon Style="width: 36px" />
+            </MudItem>
+            <MudStack Spacing="0">
+                <MudText Typo="Typo.h5" Class="drawer-menu-appname" Align="Align.Left">@AppData.Name</MudText>
+                <MudText Typo="Typo.body1" Class="drawer-menu-appversion" Align="Align.Left">@AppData.Version</MudText>
+            </MudStack>
+        </MudStack>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        @foreach (var menuItem in AppData.MenuItems)
+        {
+            @if (menuItem.Permissions is null || SessionManager.HasAccountPermissionTo(menuItem.Permissions))
+            {
+                <MudNavLink Href="@menuItem.Location" Match="NavLinkMatch.All" Icon="@menuItem.Icon" IconColor="Color.Inherit">@menuItem.Text</MudNavLink>
+            }
+        }
+    </MudNavMenu>
+</MudDrawer>
+
+@code{
+    [Parameter]
+    public bool Open { get; set; } = true;
+}

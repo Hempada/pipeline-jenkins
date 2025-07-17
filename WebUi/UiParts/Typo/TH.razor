@@ -1,0 +1,20 @@
+﻿@inherits ComponentBase
+
+<MudText Class="@Class" Align="@Align">
+    @ChildContent
+</MudText>
+
+@code {
+    private const string INITIAL_CLASS = "bold";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Class { get; set; } = INITIAL_CLASS;
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public MudBlazor.Align Align { get; set; } = MudBlazor.Align.Start;
+}

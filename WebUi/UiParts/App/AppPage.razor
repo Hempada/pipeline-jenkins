@@ -1,0 +1,67 @@
+﻿@using System.Reflection;
+@inherits ComponentBase
+
+<style>
+    .pc-loading {
+    }
+    .pc-fab {
+        padding: 4px;
+        border-radius: 24px;
+        height: 48px !important;
+        width: 48px !important;
+        background-color: var(--mud-palette-surface);
+        box-shadow: var(--mud-elevation-2);
+    }
+</style>
+
+<PageTitle>@Title</PageTitle>
+
+@if (Loading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="pc-loading" />
+}
+
+
+<MudPaper Class="ml-4 mr-4 mt-4 pa-8">
+    <MudStack Row>
+        <Title>@Title</Title>
+        <MudSpacer />
+        @foreach (var button in Buttons)
+        {
+            <RequiresPermissionView Permissions="@button.Permissions">
+                <AppButton Type="AppButtonType.Primary" OnClick="@button.OnClick" Color="@button.Color">@button.Title</AppButton>
+            </RequiresPermissionView>
+        }
+        @if (Button is not null)
+        {
+            <RequiresPermissionView Permissions="@Button.Permissions">
+                <AppButton Type="AppButtonType.Primary" OnClick="@Button.OnClick" Color="@Button.Color">@Button.Title</AppButton>
+            </RequiresPermissionView>
+        }
+    </MudStack>
+
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+</MudPaper>
+
+@code{
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Loading { get; set; } = false;
+
+    [Parameter]
+    public PageButtonNav[] Buttons { get; set; } = [];
+
+    [Parameter]
+    public PageButtonNav? Button { get; set; }
+
+
+    public record PageButtonNav(string Title, Action OnClick, string[] Permissions, Color Color = Color.Primary);
+}

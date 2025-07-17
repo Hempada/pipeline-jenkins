@@ -1,0 +1,32 @@
+﻿@page "/accounts/add"
+@page "/accounts/edit/{Id}"
+@inherits AddPageComponentBase<Account>
+
+@attribute [RequiresPermission(Permission.CREATE_ACCOUNT)]
+
+<AppPage Title="@PageTitle" Loading="@Loading">
+
+    <AppTextField Label="Usuário" Disabled="Loading" @bind-Value="Username.Value" MaxLength=255 />
+
+    <AppTextField Label="Nome" Disabled="Loading" @bind-Value="Name.Value" MaxLength=255 />
+
+    <AppTextField Label="Email" Disabled="Loading" @bind-Value="Email.Value" MaxLength=255 />
+
+    <AppSelect T="Profile" Label="Perfil" Disabled="Loading" @bind-Value="Profile.Value" ToStringFunc="@ProfileToString">
+        @foreach (var profile in Profiles)
+        {
+            <MudSelectItem Value="@profile" />
+        }
+    </AppSelect>
+    
+    <AppDivider />
+
+    <AppFormButtons
+        Loading="@Loading"
+        CancelButtonAction="OnCancel"
+        SecondaryButtonVisible="false"
+        PrimaryButtonTitle="Salvar"
+        PrimaryButtonAction="OnSave"
+        PrimaryButtonDisabled="@(!DataChanged)"/>
+
+</AppPage>

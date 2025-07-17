@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits Grid<TItem>
+@typeparam TItem
+
+@((RenderTreeBuilder builder) => base.BuildRenderTree(builder))
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        base.Class = "table";
+        base.AllowFiltering = true;
+        base.AllowPaging = true;
+        base.AllowSorting = true;
+        base.Responsive = true;
+        base.FiltersTranslationProvider = GridFiltersTranslationProvider;
+        base.PaginationItemsTextFormat = "{0} - {1} de {2} itens";
+        base.ItemsPerPageText = "Itens por página";
+        base.PageSizeSelectorVisible = true;
+        base.PageSizeSelectorItems = new int[] { 10, 25, 50 };
+    }
+
+    private async Task<IEnumerable<FilterOperatorInfo>> GridFiltersTranslationProvider()
+    {
+        var filtersTranslation = new List<FilterOperatorInfo>();
+
+        // number/date/boolean
+        filtersTranslation.Add(new("=", "Igual a", BlazorBootstrap.FilterOperator.Equals));
+        filtersTranslation.Add(new("!=", "Diferente de", BlazorBootstrap.FilterOperator.NotEquals));
+        // number/date
+        filtersTranslation.Add(new("<", "Menor que", BlazorBootstrap.FilterOperator.LessThan));
+        filtersTranslation.Add(new("<=", "Menor ou igual a", BlazorBootstrap.FilterOperator.LessThanOrEquals));
+        filtersTranslation.Add(new(">", "Maior que", BlazorBootstrap.FilterOperator.GreaterThan));
+        filtersTranslation.Add(new(">=", "Maior ou igual a", BlazorBootstrap.FilterOperator.GreaterThanOrEquals));
+        // string
+        filtersTranslation.Add(new("*a*", "Contém", BlazorBootstrap.FilterOperator.Contains));
+        filtersTranslation.Add(new("!*a*", "Não contém", BlazorBootstrap.FilterOperator.DoesNotContain));
+        filtersTranslation.Add(new("a**", "Começa com", BlazorBootstrap.FilterOperator.StartsWith));
+        filtersTranslation.Add(new("**a", "Termina com", BlazorBootstrap.FilterOperator.EndsWith));
+        // common
+        filtersTranslation.Add(new("x", "Limpar", BlazorBootstrap.FilterOperator.Clear));
+
+        return await Task.FromResult(filtersTranslation);
+    }
+}

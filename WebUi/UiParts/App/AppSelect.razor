@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits MudSelect<T>
+@typeparam T
+
+@((RenderTreeBuilder builder) => base.BuildRenderTree(builder))
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        base.Variant = MudBlazor.Variant.Outlined;
+    }
+}

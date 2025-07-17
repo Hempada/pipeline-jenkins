@@ -1,0 +1,29 @@
+﻿@page "/profiles/add"
+@page "/profiles/edit/{Id}"
+@inherits AddPageComponentBase<Profile>
+
+@attribute [RequiresPermission(Permission.CREATE_PROFILE)]
+
+<AppPage Title="@PageTitle" Loading="@Loading">
+
+    <AppTextField Label="Nome" Disabled="Loading" @bind-Value="Name.Value" MaxLength=255 />
+
+    <AppSelect Label="Permissões" Disabled="Loading" MultiSelection="true" @bind-SelectedValues="Permissions.Value"
+               MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))">
+        @foreach (var permission in Permission.All)
+        {
+            <MudSelectItem Value="@permission">@Permission.GetDescription(permission)</MudSelectItem>
+        }
+    </AppSelect>
+    
+    <AppDivider />
+
+    <AppFormButtons
+        Loading="@Loading"
+        CancelButtonAction="OnCancel"
+        SecondaryButtonVisible="false"
+        PrimaryButtonTitle="Salvar"
+        PrimaryButtonAction="OnSave"
+        PrimaryButtonDisabled="@(!DataChanged)"/>
+
+</AppPage>

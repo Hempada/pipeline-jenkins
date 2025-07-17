@@ -1,0 +1,24 @@
+﻿<MudDivider Style="@_style" Class="@_class" />
+
+@code {
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+
+    private string _class = "mt-8 mb-4";
+    private string _style = $"border-color:{Colors.Gray.Lighten1};";
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (Style != null)
+        {
+            _style += Style;
+        }
+
+        if (Class != null)
+        {
+            _class += Class;
+        }
+
+        return base.OnParametersSetAsync();
+    }
+}

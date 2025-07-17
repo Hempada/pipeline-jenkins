@@ -1,0 +1,10 @@
+﻿<MudMenu Disabled="@(Disabled || Forbidden)" @ref="MenuRef" Icon="@MudBlazor.Icons.Material.Outlined.MoreVert" Color="@Color" AnchorOrigin="@AnchorOrigin" TransformOrigin="@TransformOrigin">
+	<MudList T="string" Dense="@Dense">
+		@foreach (var item in Items)
+		{
+			<RequiresPermissionView Permissions="@item.Permissions">
+				<MudListItem Text="@item.Text" Icon="@item.Icon" OnClick="@(() => OnClick(item))" Dense="@Dense" />
+			</RequiresPermissionView>
+		}
+	</MudList>
+</MudMenu>

@@ -1,0 +1,88 @@
+﻿@layout EmptyLayout
+@page "/login"
+@inherits PageComponentBase
+
+<style>
+    html, body, #app {
+        height: 100%;
+    }
+
+    #app .mud-container {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        height: 100% !important;
+    }
+
+    #app .mud-container .d-flex {
+        height: 100% !important;
+        padding-bottom: 0 !important;
+    }
+
+    .content {
+        height: 100% !important;
+        width: 100% !important;
+        justify-content: center;
+        display: flex;
+    }
+
+    .loading {
+        margin-left: -80px;
+        width: calc(100% + 160px) !important;
+        margin-top: -40px;
+        margin-bottom: 40px;
+    }
+
+    .card {
+        padding: 24px 64px;
+        width: 420px;
+        max-width: calc(100% - 32px);
+        align-self: center;
+    }
+
+    .icon {
+        height: 150px;
+        margin-bottom: 8px;
+    }
+
+    .bg {
+        position: absolute;
+        z-index: -1;
+        width: 100% !important;
+        height: 100% !important;
+        opacity: 0.2;
+        background-image: url(images/app-logo.svg);
+        background-repeat: no-repeat;
+        background-size: 60% auto;
+        background-position-x: right;
+        background-position-y: bottom;
+    }
+</style>
+
+<div class="bg"></div>
+<div class="content">
+    <MudCard Class="card">
+        <MudCardContent>
+            @if (Loading)
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="loading" />
+            }
+            <MudStack Row Class="justify-center">
+                <AppIcon Class="icon" />
+            </MudStack>
+            <MudStack Row>
+                <MudTextField Disabled="@Loading" @bind-Value="Username" Label="Usuário" Clearable />
+            </MudStack>
+            <MudStack Row>
+                <MudTextField Disabled="@Loading" @bind-Value="Password" Label="Senha" Clearable />
+            </MudStack>
+        </MudCardContent>
+        <MudCardActions>
+            <AppButton Disabled="@Loading" Type="AppButtonType.Primary" OnClick="() => QueryLoginAsync()">
+                Entrar
+            </AppButton>
+        </MudCardActions>
+    </MudCard>
+</div>
+
+
+

@@ -1,0 +1,29 @@
+﻿@page "/accounts"
+@inherits ListPageComponentBase<Account>
+
+@attribute [RequiresPermission(Permission.VIEW_ACCOUNT)]
+
+<AppPage Title="@PageTitle" Loading="@Loading" Button="@AddButton">
+    
+    <AppGrid @ref="grid" TItem="Account" DataProvider="DataProvider">
+        <GridColumns>
+            <GridColumn TItem="Account" HeaderText="Nome" PropertyName="Name" SortString="Name" SortKeySelector="item => item.Name" FilterOperator="BlazorBootstrap.FilterOperator.Contains">
+                @context.Name
+            </GridColumn>
+            <GridColumn TItem="Account" HeaderText="Perfil" PropertyName="Profile/Name as string" SortString="Profile/Name" SortKeySelector="item => (item.Profile != null ? item.Profile!.Name : string.Empty)" FilterOperator="BlazorBootstrap.FilterOperator.Contains">
+                @context.Profile?.Name
+            </GridColumn>
+            <GridColumn TItem="Account" HeaderText="Ações" Sortable="false" Filterable="false" HeaderTextAlignment="Alignment.End" TextAlignment="Alignment.End">
+                <AppKebabMenu Disabled="@Loading"
+                    Items="@(
+                        new List<AppKebabItem>() {
+                            new("Editar", () => OnEdit(context.Id), [Permission.CREATE_ACCOUNT]),
+                            new("Excluir", () => OnDelete(context.Id, context.Name), [Permission.DELETE_ACCOUNT]),
+                        }
+                    )">
+                </AppKebabMenu>
+            </GridColumn>
+        </GridColumns>
+    </AppGrid>
+
+</AppPage>

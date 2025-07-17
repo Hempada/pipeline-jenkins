@@ -1,0 +1,52 @@
+﻿@using WebUi.Authorization
+@using WebUi.Services
+@inherits LayoutComponentBase
+
+@inject ISessionManager SessionManager
+
+<MudMainContent>
+
+    @if (!Loading)
+    {
+        if (Allowed)
+        {
+            @Body
+        }
+        else
+        {
+            <NotAllowedView />
+        }
+    }
+
+</MudMainContent>
+
+@code
+{
+    public bool Loading { get; set; } = true;
+    public bool Allowed { get; set; } = false;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        Loading = true;
+        await base.OnParametersSetAsync();
+
+        RequiresPermissionAttribute? pagePermissionAttribute = GetPagePermissionAttribute(Body);
+
+        if (pagePermissionAttribute is null || !pagePermissionAttribute.Permissions.Any())
+        {
+            Allowed = true;
+            Loading = false;
+            return;
+        }
+
+        Allowed = SessionManager.HasAccountPermissionTo(pagePermissionAttribute.Permissions);
+
+        Loading = false;
+
+        static RequiresPermissionAttribute? GetPagePermissionAttribute(RenderFragment? body)
+        {
+            Type? component = (body?.Target as RouteView)?.RouteData.PageType;
+            return component?.GetCustomAttributes(inherit: true).OfType<RequiresPermissionAttribute>().FirstOrDefault();
+        }
+    }
+}

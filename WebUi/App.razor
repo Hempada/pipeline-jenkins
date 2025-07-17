@@ -1,0 +1,65 @@
+﻿@using WebUi.Services
+
+@inject NavigationManager NavigationManager
+@inject IInternalSessionManager SessionManager
+
+@if (Loading)
+{
+    <AppIcon Style="height: 154px; margin: 23vh auto 1rem auto; left: 0; position: absolute; right: 0;" />
+}
+@if (!Loading)
+{
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+}
+
+@code {
+    private bool loading = true;
+    public bool Loading
+    {
+        get => loading;
+        set
+        {
+            loading = value;
+            StateHasChanged();
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        Loading = true;
+
+        await SessionManager.InitializeAsync();
+
+        if (!SessionManager.IsValid())
+        {
+            NavigationManager.NavigateTo("login");
+            Loading = false;
+            return;
+        }
+
+        var token = SessionManager.Token;
+        if (string.IsNullOrEmpty(token))
+        {
+            NavigationManager.NavigateTo("login");
+            Loading = false;
+            return;
+        }
+
+        Loading = false;
+    }
+
+
+    public record MenuItem(string Location, string Text, string Icon, string[]? Permissions = null);
+}

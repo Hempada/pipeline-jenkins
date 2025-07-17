@@ -1,0 +1,12 @@
+﻿@inherits ComponentBase
+<img class="logo @Class" src="Images/app-icon.svg" style="@Style" />
+
+@code{
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Class { get; set; } = string.Empty;
+
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Style { get; set; } = string.Empty;
+}

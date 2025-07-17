@@ -1,0 +1,19 @@
+﻿@page "/customers"
+@inherits ListPageComponentBase<Customer>
+
+@attribute [RequiresPermission(Permission.VIEW_CUSTOMER)]
+
+<AppPage Title="@PageTitle" Loading="@Loading" Button="@AddButton">
+
+    <AppGrid TItem="Customer" DataProvider="DataProvider">
+        <GridColumns>
+            <GridColumn TItem="Customer" HeaderText="Nome" PropertyName="Name" SortString="Name" SortKeySelector="item => item.Name" FilterOperator="BlazorBootstrap.FilterOperator.Contains">
+                @context.Name
+            </GridColumn>
+            <GridColumn TItem="Customer" HeaderText="Email" PropertyName="Email" SortString="Email" SortKeySelector="item => item.Email" >
+                @context.Email
+            </GridColumn>
+        </GridColumns>
+    </AppGrid>
+
+</AppPage>

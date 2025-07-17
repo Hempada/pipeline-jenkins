@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits MudButton
+
+<style>
+    .mud-button-outlined-size-medium, .mud-button-filled-size-medium {
+        height: 36.5px;
+        max-height: 36.5px;
+    }
+</style>
+
+@((RenderTreeBuilder builder) => base.BuildRenderTree(builder))
+
+@code {
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        switch (Type)
+        {
+            case AppButtonType.Primary:
+                base.Variant = MudBlazor.Variant.Filled;
+                base.Color = Color.Primary;
+                base.DropShadow = false;
+                break;
+
+            case AppButtonType.Danger:
+                base.Variant = MudBlazor.Variant.Filled;
+                base.Color = Color.Error;
+                base.DropShadow = false;
+                break;
+
+            default:
+                base.Variant = MudBlazor.Variant.Outlined;
+                base.Color = Color.Default;
+                break;
+        }
+    }
+
+    [Parameter]
+    public AppButtonType Type { get; set; } = AppButtonType.Default;
+}

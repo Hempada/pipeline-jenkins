@@ -1,0 +1,103 @@
+﻿@using System.Reflection;
+@inherits ComponentBase
+
+
+<MudStack>
+    <MudStack Row>
+        @if (CancelButtonVisible)
+        {
+            <RequiresPermissionView Permissions="@CancelButtonPermissions">
+                <AppButton 
+                    Disabled="@(Loading || CancelButtonDisabled)"
+                    Type="@CancelButtonType"
+                    OnClick="@CancelButtonAction">@CancelButtonTitle</AppButton>
+            </RequiresPermissionView>
+        }
+
+        <MudSpacer />
+
+        @if (SecondaryButtonVisible)
+        {
+            <RequiresPermissionView Permissions="@SecondaryButtonPermissions">
+                <AppButton Disabled="@(Loading || SecondaryButtonDisabled)"
+                           Type="@SecondaryButtonType"
+                           OnClick="@SecondaryButtonAction">@SecondaryButtonTitle</AppButton>
+            </RequiresPermissionView>
+        }
+
+        @if (PrimaryButtonVisible)
+        {
+            <RequiresPermissionView Permissions="@PrimaryButtonPermissions">
+                <AppButton Disabled="@(Loading || PrimaryButtonDisabled)"
+                           Type="@PrimaryButtonType"
+                           OnClick="@PrimaryButtonAction">@PrimaryButtonTitle</AppButton>
+            </RequiresPermissionView>
+        }
+    </MudStack>
+</MudStack>
+
+@code{
+    [Parameter]
+    public bool Loading { get; set; } = false;
+
+
+    #region PRIMARY
+    [Parameter]
+    public string PrimaryButtonTitle { get; set; } = string.Empty;
+
+    [Parameter]
+    public Action PrimaryButtonAction { get; set; } = default!;
+
+    [Parameter]
+    public AppButtonType PrimaryButtonType { get; set; } = AppButtonType.Primary;
+
+    [Parameter]
+    public string[] PrimaryButtonPermissions { get; set; } = [];
+
+    [Parameter]
+    public bool PrimaryButtonVisible { get; set; } = true;
+
+    [Parameter]
+    public bool PrimaryButtonDisabled { get; set; } = false;
+    #endregion PRIMARY
+    
+    #region SECONDARY
+    [Parameter]
+    public string SecondaryButtonTitle { get; set; } = string.Empty;
+
+    [Parameter]
+    public Action SecondaryButtonAction { get; set; } = default!;
+
+    [Parameter]
+    public AppButtonType SecondaryButtonType { get; set; } = AppButtonType.Default;
+
+    [Parameter]
+    public string[] SecondaryButtonPermissions { get; set; } = [];
+
+    [Parameter]
+    public bool SecondaryButtonVisible { get; set; } = true;
+
+    [Parameter]
+    public bool SecondaryButtonDisabled { get; set; } = false;
+    #endregion SECONDARY
+
+    #region CANCEL
+    [Parameter]
+    public string CancelButtonTitle { get; set; } = "Cancelar";
+
+    [Parameter]
+    public Action CancelButtonAction { get; set; } = default!;
+
+    [Parameter]
+    public AppButtonType CancelButtonType { get; set; } = AppButtonType.Default;
+
+    [Parameter]
+    public string[] CancelButtonPermissions { get; set; } = [];
+
+    [Parameter]
+    public bool CancelButtonVisible { get; set; } = true;
+
+    [Parameter]
+    public bool CancelButtonDisabled { get; set; } = false;
+    #endregion CANCEL
+}

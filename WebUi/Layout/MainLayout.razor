@@ -1,0 +1,77 @@
+﻿@using WebUi.Authorization
+@using WebUi.Services
+@inherits LayoutComponentBase
+
+@inject NavigationManager NavigationManager
+@inject IInternalSessionManager SessionManager
+
+<style>
+    .app-bar {
+        border-bottom: solid 1px var(--mud-palette-gray-light);
+        background-color: white;
+    }
+
+    .app-bar-logo {
+        height: 16px;
+        margin-left: 8px;
+    }
+
+    .app-bar-color {
+        color: var(--app-bar-color);
+    }
+</style>
+
+@* Required *@
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+<MudThemeProvider IsDarkMode="@DarkMode" Theme="@CurrentTheme" />
+
+
+<MudLayout>
+    <MudAppBar Fixed="true" Elevation="0" Class="app-bar">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Class="app-bar-color" Edge="Edge.Start" OnClick="ToggleDrawer" />
+        <img src="Images/app-logo.svg" class="app-bar-logo" />
+        <MudSpacer />
+        @if (SessionManager.IsValid())
+        {
+            <MudMenu Label="@SessionManager.Account.Name" AnchorOrigin="Origin.BottomLeft" Dense="true">
+                <MudMenuItem OnClick="Logoff">Sair</MudMenuItem>
+            </MudMenu>
+        }
+        
+    </MudAppBar>
+
+    <DrawerMenu Open="@Open" />
+
+    @if (Body is not null)
+    {
+        <BodyContentView Body="@Body" />
+    }
+</MudLayout>
+
+@code
+{
+    public bool DarkMode { get; private set; } = false;
+
+    private MudTheme CurrentTheme { get; set; } = new WebUi.Theming.Theme();
+
+    private bool Open = false;
+
+    private void ToggleDrawer()
+    {
+        Open = !Open;
+    }
+
+    private async Task Logoff()
+    {
+        await SessionManager.ClearSessionAsync();
+        NavigationManager.NavigateTo("", true);
+    }
+}

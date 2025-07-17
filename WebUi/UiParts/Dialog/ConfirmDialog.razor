@@ -1,0 +1,43 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <AppButton OnClick="Cancel">
+            @SecondaryButtonText
+        </AppButton>
+        <AppButton OnClick="Submit" Type="PrimaryButtonType">
+            @PrimaryButtonText
+        </AppButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    [Parameter] public string? ContentText { get; set; }
+    [Parameter] public string? PrimaryButtonText { get; set; }
+    [Parameter] public AppButtonType PrimaryButtonType { get; set; } = AppButtonType.Primary;
+    [Parameter] public string SecondaryButtonText { get; set; } = "Cancelar";
+
+    void Submit() => MudDialog?.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog?.Cancel();
+
+    public async static Task<bool> ShowAsync(IDialogService DialogService, string Message, string PrimaryButtonText, AppButtonType? PrimaryButtonType = null)
+    {
+        var parameters = new DialogParameters<ConfirmDialog>
+        {
+            { x => x.ContentText, Message },
+            { x => x.PrimaryButtonText, PrimaryButtonText }
+        };
+
+        if (PrimaryButtonType is not null)
+        {
+            parameters.Add("PrimaryButtonType", PrimaryButtonType);
+        }
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = await DialogService.ShowAsync<ConfirmDialog>(null, parameters, options);
+        var result = await dialog.Result;
+        return !result?.Canceled ?? false;
+    }
+}

@@ -1,0 +1,29 @@
+﻿@page "/profiles"
+@inherits ListPageComponentBase<Profile>
+
+@attribute [RequiresPermission(Permission.VIEW_PROFILE)]
+
+<AppPage Title="@PageTitle" Loading="@Loading" Button="@AddButton">
+    
+    <AppGrid @ref="grid" TItem="Profile" DataProvider="DataProvider">
+        <GridColumns>
+            <GridColumn TItem="Profile" HeaderText="Nome" PropertyName="Name" SortString="Name" SortKeySelector="item => item.Name" FilterOperator="BlazorBootstrap.FilterOperator.Contains">
+                @context.Name
+            </GridColumn>
+            <GridColumn TItem="Profile" HeaderText="Permissões" PropertyName="Permissions" Sortable="false">
+                @string.Join(", ", Permission.GetDescription(context.Permissions))
+            </GridColumn>
+            <GridColumn TItem="Profile" HeaderText="Ações" Sortable="false" Filterable="false" HeaderTextAlignment="Alignment.End" TextAlignment="Alignment.End">
+                <AppKebabMenu Disabled="@Loading"
+                    Items="@(
+                        new List<AppKebabItem>() {
+                            new("Editar", () => OnEdit(context.Id), [Permission.CREATE_PROFILE]),
+                            new("Excluir", () => OnDelete(context.Id, context.Name), [Permission.DELETE_PROFILE]),
+                        }
+                    )">
+                </AppKebabMenu>
+            </GridColumn>
+        </GridColumns>
+    </AppGrid>
+
+</AppPage>
