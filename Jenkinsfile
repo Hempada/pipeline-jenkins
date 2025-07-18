@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'pcampos2', url: 'https://github.com/Hempada/pipeline-jenkins.git', branch: 'ApiTest'
+                git credentialsId: 'Hempada', url: 'https://github.com/Hempada/pipeline-jenkins.git', branch: 'master'
             }
         }
 
