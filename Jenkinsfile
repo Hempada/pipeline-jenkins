@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'pcampos2', url: 'git@gitlab.com:instituto-reconcavo-de-tecnologia/mondial/tms/tms-web.git', branch: 'ApiTest'
+                git credentialsId: 'pcampos2', url: 'https://github.com/Hempada/pipeline-jenkins.git', branch: 'ApiTest'
             }
         }
 
